@@ -28,8 +28,8 @@ def get_optimizers_and_schedulers(gen, disc):
     # The learning rate for the generator should be decayed to 0 over
     # 100K iterations.
     ##################################################################
-    scheduler_discriminator = torch.optim.LambdaLR(optim_discriminator, lr_lambda = lambda iter: 1 - (iter/500e3))
-    scheduler_generator = torch.optim.LambdaLR(optim_generator, lr_lambda = lambda iter: 1 - (iter/100e3))
+    scheduler_discriminator = torch.optim.lr_scheduler.LambdaLR(optim_discriminator, lr_lambda = lambda iter: 1 - (iter/500e3))
+    scheduler_generator = torch.optim.lr_scheduler.LambdaLR(optim_generator, lr_lambda = lambda iter: 1 - (iter/100e3))
     ##################################################################
     #                          END OF YOUR CODE                      #
     ##################################################################
@@ -116,8 +116,9 @@ def train_model(
                 # TODO 1.5 Compute the interpolated batch and run the
                 # discriminator on it.
                 ###################################################################
-                interp = None
-                discrim_interp = None
+                eta = torch.FloatTensor(train_batch.shape[0],1,1,1).uniform_(0,1).expand(train_batch.shape).cuda()
+                interp = eta * train_batch + (1-eta) * gen_output
+                discrim_interp = disc(interp)
                 ##################################################################
                 #                          END OF YOUR CODE                      #
                 ##################################################################

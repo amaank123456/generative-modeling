@@ -55,6 +55,7 @@ def interpolate_latent_space(gen, path):
     z[:,0], z[:,1] = x, y
 
     # Forward the samples through the generator
+    z = z.cuda()
     out = gen.forward_given_samples(z)
 
     # Save the images

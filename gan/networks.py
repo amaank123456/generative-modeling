@@ -307,7 +307,7 @@ class Generator(torch.jit.ScriptModule):
         # TODO 1.1: Generate n_samples latents and forward through the
         # network.
         ##################################################################
-        z = torch.randn(n_samples, 128)
+        z = torch.randn(n_samples, 128).cuda()
         out = self.forward_given_samples(z)
         return out
         ##################################################################
